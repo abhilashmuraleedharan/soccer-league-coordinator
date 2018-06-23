@@ -106,7 +106,7 @@ let leaguePlayersList = [
 // Function to print to console player details in a collection
 func displayPlayerDetails(inCollection list: [[String: Any]]) {
     for player in list {
-        print("") // To put a blank line
+        print("") // To add a new line
         for (detail, detailValue) in player {
             print("\(detail): \(detailValue)")
         }
@@ -125,11 +125,11 @@ print("")
  * b) Create a collection to hold teams
  * c) Put all experienced players in an array
  * d) Put all inexperienced players in another array
- * e) To have same average height across teams,
+ * e) To have similar average height across teams,
  *       1) Sort experienced players array in ascending order of their heights
  *       2) Sort inexperienced players array in descending order of their heights
- * f) Distribute across the teams, players from the sorted experiened and
- *    unexperienced players list in such a way that it satisfies the following conditions
+ * f) Distribute across the teams, players from the sorted experienced and
+ *    inexperienced players list in such a way that it satisfies the following conditions
  *    1. Ratio of experienced to inexperienced players across teams should be same
  *    2. Average Height difference between teams shouldn't exceed more than 1.5 inches
  */
@@ -261,8 +261,8 @@ func getPlayersAvgHeight(ofTeam team:[[String: Any]]) -> Double {
 
 // Get and print the average height of players of each team
 print("----------------------------------------------------------------------------------------")
-print("Average height of players of Team Dragons is \(getPlayersAvgHeight(ofTeam: teamDragons))")
-print("Average height of players of Team Sharks is \(getPlayersAvgHeight(ofTeam: teamSharks))")
-print("Average height of players of Team Raptors is \(getPlayersAvgHeight(ofTeam: teamRaptors))")
+print("Average height of players of Team Dragons is \(getPlayersAvgHeight(ofTeam: teamDragons)) inches")
+print("Average height of players of Team Sharks is \(getPlayersAvgHeight(ofTeam: teamSharks)) inches")
+print("Average height of players of Team Raptors is \(getPlayersAvgHeight(ofTeam: teamRaptors)) inches")
 
 
