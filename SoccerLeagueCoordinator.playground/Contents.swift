@@ -2,6 +2,8 @@
  * 1. Dragons
  * 2. Sharks
  * 3. Raptors
+ * wherein every team has equal balance of experienced and inexperienced players
+ * Bonus points if every team has more or less same average players' height
  */
 
 /*
@@ -9,99 +11,100 @@
  * a) Store the information of all league players
  * b) Display all the players' information
  */
+
 // Use an array of dictionary [[String: Any]] to hold all player's information.
-let leaguePlayersList = [
-                         ["name":"Joe Smith",
-                          "height":42.0,
-                          "experience":true,
-                          "guardian":"Jim and Jan Smith"
-                         ],
-                         ["name":"Jill Tanner",
-                          "height":36.0,
-                          "experience":true,
-                          "guardian":"Clara Tanner"
-                         ],
-                         ["name":"Bill Bon",
-                          "height":43.0,
-                          "experience":true,
-                          "guardian":"Sara and Jenny Bon"
-                         ],
-                         ["name":"Eva Gordon",
-                          "height":45.0,
-                          "experience":false,
-                          "guardian":"Wendy and Mike Gordon"
-                         ],
-                         ["name":"Matt Gill",
-                          "height":40.0,
-                          "experience":false,
-                          "guardian":"Charles and Sylvia Gill"
-                         ],
-                         ["name":"Kimmy Stein",
-                          "height":41.0,
-                          "experience":false,
-                          "guardian":"Bill and Hillary Stein"
-                         ],
-                         ["name":"Sammy Adams",
-                          "height":45.0,
-                          "experience":false,
-                          "guardian":"Jeff Adams"
-                         ],
-                         ["name":"Karl Saygan",
-                          "height":42.0,
-                          "experience":true,
-                          "guardian":"Heather Bledsoe"
-                         ],
-                         ["name":"Suzane Greenberg",
-                          "height":44.0,
-                          "experience":true,
-                          "guardian":"Henrietta Dumas"
-                         ],
-                         ["name":"Sal Dali",
-                          "height":41.0,
-                          "experience":false,
-                          "guardian":"Gala Dali"
-                         ],
-                         ["name":"Joe Kavalier",
-                          "height":39.0,
-                          "experience":false,
-                          "guardian":"Sam and Elaine Kavalier"
-                         ],
-                         ["name":"Ben Finkelstein",
-                          "height":44.0,
-                          "experience":false,
-                          "guardian":"Aaron and Jill Finkelstein"
-                         ],
-                         ["name":"Diego Soto",
-                          "height":41.0,
-                          "experience":true,
-                          "guardian":"Robin and Sarika Soto"
-                         ],
-                         ["name":"Chloe Alaska",
-                          "height":47.0,
-                          "experience":false,
-                          "guardian":"David and Jamie Alaska"
-                         ],
-                         ["name":"Arnold Willis",
-                          "height":43.0,
-                          "experience":false,
-                          "guardian":"Claire Willis"
-                         ],
-                         ["name":"Phillip Helm",
-                          "height":44.0,
-                          "experience":true,
-                          "guardian":"Thomas Helm and Eva Jones"
-                         ],
-                         ["name":"Les Clay",
-                          "height":42.0,
-                          "experience":true,
-                          "guardian":"Wynonna Brown"
-                         ],
-                         ["name":"Herschel Krustofski",
-                          "height":45.0,
-                          "experience":true,
-                          "guardian":"Hyman and Rachel Krustofski"
-                         ]
-                        ]
+let players = [
+               ["name":"Joe Smith",
+                "height":42.0,
+                "experience":true,
+                "guardian":"Jim and Jan Smith"
+               ],
+               ["name":"Jill Tanner",
+                "height":36.0,
+                "experience":true,
+                "guardian":"Clara Tanner"
+               ],
+               ["name":"Bill Bon",
+                "height":43.0,
+                "experience":true,
+                "guardian":"Sara and Jenny Bon"
+               ],
+               ["name":"Eva Gordon",
+                "height":45.0,
+                "experience":false,
+                "guardian":"Wendy and Mike Gordon"
+               ],
+               ["name":"Matt Gill",
+                "height":40.0,
+                "experience":false,
+                "guardian":"Charles and Sylvia Gill"
+               ],
+               ["name":"Kimmy Stein",
+                "height":41.0,
+                "experience":false,
+                "guardian":"Bill and Hillary Stein"
+               ],
+               ["name":"Sammy Adams",
+                "height":45.0,
+                "experience":false,
+                "guardian":"Jeff Adams"
+               ],
+               ["name":"Karl Saygan",
+                "height":42.0,
+                "experience":true,
+                "guardian":"Heather Bledsoe"
+               ],
+               ["name":"Suzane Greenberg",
+                "height":44.0,
+                "experience":true,
+                "guardian":"Henrietta Dumas"
+               ],
+               ["name":"Sal Dali",
+                "height":41.0,
+                "experience":false,
+                "guardian":"Gala Dali"
+               ],
+               ["name":"Joe Kavalier",
+                "height":39.0,
+                "experience":false,
+                "guardian":"Sam and Elaine Kavalier"
+               ],
+               ["name":"Ben Finkelstein",
+                "height":44.0,
+                "experience":false,
+                "guardian":"Aaron and Jill Finkelstein"
+               ],
+               ["name":"Diego Soto",
+                "height":41.0,
+                "experience":true,
+                "guardian":"Robin and Sarika Soto"
+               ],
+               ["name":"Chloe Alaska",
+                "height":47.0,
+                "experience":false,
+                "guardian":"David and Jamie Alaska"
+               ],
+               ["name":"Arnold Willis",
+                "height":43.0,
+                "experience":false,
+                "guardian":"Claire Willis"
+               ],
+               ["name":"Phillip Helm",
+                "height":44.0,
+                "experience":true,
+                "guardian":"Thomas Helm and Eva Jones"
+               ],
+               ["name":"Les Clay",
+                "height":42.0,
+                "experience":true,
+                "guardian":"Wynonna Brown"
+               ],
+               ["name":"Herschel Krustofski",
+                "height":45.0,
+                "experience":true,
+                "guardian":"Hyman and Rachel Krustofski"
+               ]
+              ]
 
 // Function to print to console player details in a collection
 func displayPlayerDetails(inCollection list: [[String: Any]]) {
@@ -116,7 +119,7 @@ func displayPlayerDetails(inCollection list: [[String: Any]]) {
 // Test the displayPlayerDetails function by displaying information of all players in the league
 print("Listing below the details of all players in the league")
 print("------------------------------------------------------")
-displayPlayerDetails(inCollection: leaguePlayersList)
+displayPlayerDetails(inCollection: players)
 print("")
 
 /*
@@ -144,7 +147,7 @@ var leagueTeams = [teamDragons, teamSharks, teamRaptors]
 let totalTeams = 3
 
 // Put all experienced and inexperienced players in respective arrays
-for player in leaguePlayersList {
+for player in players {
     if (player["experience"] as! Bool == true) {
         experiencedLeaguePlayers.append(player)
     } else {
@@ -159,11 +162,11 @@ let incHeightSortedExperiencedPlayers = experiencedLeaguePlayers.sorted{ ($0["he
 let decHeightSortedInExperiencedPlayers = inExperiencedLeaguePlayers.sorted{ ($0["height"] as! Double) > ($1["height"] as! Double) }
 
 // Distribute the players in a balanced manner across the teams present in the leagueTeams Collection
-let playersPerTeam = leaguePlayersList.count/totalTeams
+let playersPerTeam = players.count/totalTeams
 var j: Int
 for i in 0..<totalTeams {
     j = i
-    for _ in 1...(playersPerTeam/2) { // Since 2 players are added in every iteration
+    for _ in 1...(playersPerTeam/2) { // Since 2 players are added to a team in every iteration
        leagueTeams[i].append(incHeightSortedExperiencedPlayers[j])
        leagueTeams[i].append(decHeightSortedInExperiencedPlayers[j])
        j += totalTeams
@@ -192,7 +195,7 @@ print("")
 
 /*
  * Part 3
- * Send a personalized letter to each of the guardians specifying
+ * Send a personalized letter to each of the players' guardians specifying
  * a) The player’s name
  * b) Guardian names
  * c) Team name
@@ -207,7 +210,7 @@ let raptorsPracticeTime = "March 18, 1pm"
 var teamSharksLetters = [String]()
 var teamDragonsLetters = [String]()
 var teamRaptorsLetters = [String]()
-var invitationLetters = [[String]]()
+var letters = [[String]]()
 
 // Function to format the letter to each player's guardians
 func formatLetterToGuardiansOfPlayers(aboutPracticeDateAndTime dateTime: String, ofTeam team: [[String: Any]], havingName teamName: String) -> [String] {
@@ -225,7 +228,7 @@ func formatLetterToGuardiansOfPlayers(aboutPracticeDateAndTime dateTime: String,
 }
 
 // Function to send the letter to guardians of all players of all Teams
-func sendToGuardians(letters: [[String]]) {
+func sendToGuardians(personalLetters letters: [[String]]) {
     for i in 0..<letters.count {
         for letter in letters[i] {
             print(letter)
@@ -233,17 +236,17 @@ func sendToGuardians(letters: [[String]]) {
     }
 }
 
-// Prepare and store letters to be sent to each Team
+// Prepare and store letters to be sent to each Team's player's guardians
 teamDragonsLetters = formatLetterToGuardiansOfPlayers(aboutPracticeDateAndTime: dragonsPracticeTime, ofTeam: teamDragons, havingName: "Dragons")
 teamSharksLetters = formatLetterToGuardiansOfPlayers(aboutPracticeDateAndTime: sharksPraciceTime, ofTeam: teamSharks, havingName: "Sharks")
 teamRaptorsLetters = formatLetterToGuardiansOfPlayers(aboutPracticeDateAndTime: raptorsPracticeTime, ofTeam: teamRaptors, havingName: "Raptors")
 
 // Compile all team letters in a single collection
-invitationLetters = [teamDragonsLetters, teamSharksLetters, teamRaptorsLetters]
+letters = [teamDragonsLetters, teamSharksLetters, teamRaptorsLetters]
 
-// Send personalized letter to guardians of each players of all teams
+// Send personalized letter to guardians of every players of all teams
 print("Send following letters to guardians of all players")
-sendToGuardians(letters: invitationLetters)
+sendToGuardians(personalLetters: letters)
 
 print("") // To put a new line
 
