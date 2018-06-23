@@ -170,7 +170,7 @@ for i in 0..<totalTeams {
     }
 }
 
-// Assign the populated team values from the leagueTeams collection to their respective team vars
+// Store each team’s players in its own collection for use in Part 3.
 teamDragons = leagueTeams[0]
 teamSharks = leagueTeams[1]
 teamRaptors = leagueTeams[2]
@@ -189,4 +189,80 @@ print("Team Raptors players are")
 print("------------------------------")
 displayPlayerDetails(inCollection: teamRaptors)
 print("")
+
+/*
+ * Part 3
+ * Send a personalized letter to each of the guardians specifying
+ * a) The player’s name
+ * b) Guardian names
+ * c) Team name
+ * d) Date/time of their first team practice
+ *    Dragons - March 17, 1pm
+ *    Sharks - March 17, 3pm
+ *    Raptors - March 18, 1pm
+ */
+let dragonsPracticeTime = "March 17, 1pm"
+let sharksPraciceTime = "March 17, 3pm"
+let raptorsPracticeTime = "March 18, 1pm"
+var teamSharksLetters = [String]()
+var teamDragonsLetters = [String]()
+var teamRaptorsLetters = [String]()
+var invitationLetters = [[String]]()
+
+// Function to format the letter to each player's guardians
+func formatLetterToGuardiansOfPlayers(aboutPracticeDateAndTime dateTime: String, ofTeam team: [[String: Any]], havingName teamName: String) -> [String] {
+    var guardians: String = ""
+    var playerName: String = ""
+    var letterBody: String = ""
+    var letters: [String] = []
+    for player in team {
+        guardians = player["guardian"] as! String
+        playerName = player["name"] as! String
+        letterBody = "To: \(guardians), Your child \(playerName) from Team \(teamName) will attend their first team practice on \(dateTime)"
+        letters.append(letterBody)
+    }
+    return letters
+}
+
+// Function to send the letter to guardians of all players of all Teams
+func sendToGuardians(letters: [[String]]) {
+    for i in 0..<letters.count {
+        for letter in letters[i] {
+            print(letter)
+        }
+    }
+}
+
+// Prepare and store letters to be sent to each Team
+teamDragonsLetters = formatLetterToGuardiansOfPlayers(aboutPracticeDateAndTime: dragonsPracticeTime, ofTeam: teamDragons, havingName: "Dragons")
+teamSharksLetters = formatLetterToGuardiansOfPlayers(aboutPracticeDateAndTime: sharksPraciceTime, ofTeam: teamSharks, havingName: "Sharks")
+teamRaptorsLetters = formatLetterToGuardiansOfPlayers(aboutPracticeDateAndTime: raptorsPracticeTime, ofTeam: teamRaptors, havingName: "Raptors")
+
+// Compile all team letters in a single collection
+invitationLetters = [teamDragonsLetters, teamSharksLetters, teamRaptorsLetters]
+
+// Send personalized letter to guardians of each players of all teams
+print("Send following letters to guardians of all players")
+sendToGuardians(letters: invitationLetters)
+
+print("") // To put a new line
+
+// Function to get average height of a team
+func getPlayersAvgHeight(ofTeam team:[[String: Any]]) -> Double {
+    var avgHeight: Double
+    var sumOfAllPlayersHeight: Double = 0.0
+    let totalPlayers: Double = Double(team.count)
+    for player in team {
+        sumOfAllPlayersHeight += player["height"] as! Double
+    }
+    avgHeight = sumOfAllPlayersHeight / totalPlayers
+    return avgHeight
+}
+
+// Get and print the average height of players of each team
+print("----------------------------------------------------------------------------------------")
+print("Average height of players of Team Dragons is \(getPlayersAvgHeight(ofTeam: teamDragons))")
+print("Average height of players of Team Sharks is \(getPlayersAvgHeight(ofTeam: teamSharks))")
+print("Average height of players of Team Raptors is \(getPlayersAvgHeight(ofTeam: teamRaptors))")
+
 
