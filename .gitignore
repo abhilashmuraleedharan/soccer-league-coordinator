@@ -75,6 +75,7 @@ fastlane/test_output
 # Excel temporary
 ~$*.xls*
 ~$*.xlsx*
+*.xlsx
 # Excel Backup File
 *.xlk
 # PowerPoint temporary
