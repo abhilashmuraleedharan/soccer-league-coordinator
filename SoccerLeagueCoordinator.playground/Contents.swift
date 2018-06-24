@@ -210,7 +210,7 @@ let raptorsPracticeTime = "March 18, 1pm"
 var teamSharksLetters = [String]()
 var teamDragonsLetters = [String]()
 var teamRaptorsLetters = [String]()
-var letters = [[String]]()
+var letters = [String]()
 
 // Function to format the letter to each player's guardians
 func formatLetterToGuardiansOfPlayers(aboutPracticeDateAndTime dateTime: String, ofTeam team: [[String: Any]], havingName teamName: String) -> [String] {
@@ -228,11 +228,9 @@ func formatLetterToGuardiansOfPlayers(aboutPracticeDateAndTime dateTime: String,
 }
 
 // Function to send the letter to guardians of all players of all Teams
-func sendToGuardians(personalLetters letters: [[String]]) {
-    for i in 0..<letters.count {
-        for letter in letters[i] {
-            print(letter)
-        }
+func sendToGuardians(personalLetters letters: [String]) {
+    for letter in letters {
+        print(letter)
     }
 }
 
@@ -242,7 +240,7 @@ teamSharksLetters = formatLetterToGuardiansOfPlayers(aboutPracticeDateAndTime: s
 teamRaptorsLetters = formatLetterToGuardiansOfPlayers(aboutPracticeDateAndTime: raptorsPracticeTime, ofTeam: teamRaptors, havingName: "Raptors")
 
 // Compile all team letters in a single collection
-letters = [teamDragonsLetters, teamSharksLetters, teamRaptorsLetters]
+letters = teamDragonsLetters + teamSharksLetters + teamRaptorsLetters
 
 // Send personalized letter to guardians of every players of all teams
 print("Send following letters to guardians of all players")
