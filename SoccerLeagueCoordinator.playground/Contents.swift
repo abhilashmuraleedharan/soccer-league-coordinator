@@ -156,6 +156,14 @@ for player in players {
     }
 }
 
+/* To achieve similar average player height across teams,
+ * the strategy employed here is
+ * a) Sort experienced players in increasing order of height
+ * b) Sort inexperienced players in decreasing order of height
+ * c) Pick players from these sorted lists while adding to team so that
+ *    average height of players in a team balances out across teams.
+ */
+
 // Sort experiencedLeaguePlayers in ascending order based on their heights and store the sorted array to a new collection
 let incHeightSortedExperiencedPlayers = experiencedLeaguePlayers.sorted{ ($0["height"] as! Double) < ($1["height"] as! Double) }
 
@@ -167,8 +175,14 @@ let playersPerTeam = players.count/totalTeams
 var j: Int
 for i in 0..<totalTeams {
     j = i
-    for _ in 1...(playersPerTeam/2) { // Since 2 players are added to a team in every iteration
+    // Distributing experienced players equally across teams
+    for _ in 1...(incHeightSortedExperiencedPlayers.count / totalTeams) {
        leagueTeams[i].append(incHeightSortedExperiencedPlayers[j])
+       j += totalTeams
+    }
+    j = i
+    // Distributing inexperienced players equally across teams
+    for _ in 1...(decHeightSortedInExperiencedPlayers.count / totalTeams) { 
        leagueTeams[i].append(decHeightSortedInExperiencedPlayers[j])
        j += totalTeams
     }
