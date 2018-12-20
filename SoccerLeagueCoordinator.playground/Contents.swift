@@ -139,15 +139,28 @@ print("")
 var experiencedLeaguePlayers = [[String: Any]]()
 var inExperiencedLeaguePlayers = [[String: Any]]()
 
+// To prevent a crash while force downcasting player["experience"] from 'Any' to 'Bool'
+func isPlayerExperienceBoolConvertible(in collection: [[String: Any]]) -> Bool {
+    if collection.isEmpty { return false }
+    for player in collection {
+        if player["experience"] is Bool {
+            continue
+        } else {
+            return false
+        }
+    }
+    return true
+}
+
 // Put all experienced and inexperienced players in respective arrays
-for player in players {
-    if player["experience"] is Bool { // To prevent crash while force downcasting player["experience"] from 'Any' to 'Bool'
+if isPlayerExperienceBoolConvertible(in: players) {
+   for player in players {
         if (player["experience"] as! Bool == true) {
             experiencedLeaguePlayers.append(player)
         } else {
             inExperiencedLeaguePlayers.append(player)
         }
-    }
+   }
 }
 
 /* To achieve similar average player height across teams,
@@ -159,7 +172,8 @@ for player in players {
  */
 
 // To prevent a crash while force downcasting player["height"] from 'Any' to 'Double'
-func isPlayerHeightsDoubleConvertible(in collection: [[String: Any]]) -> Bool {
+func isPlayerHeightDoubleConvertible(in collection: [[String: Any]]) -> Bool {
+    if collection.isEmpty { return false }
     for player in collection {
         if player["height"] is Double {
             continue
@@ -173,7 +187,12 @@ func isPlayerHeightsDoubleConvertible(in collection: [[String: Any]]) -> Bool {
 var leagueTeams = [[[String: Any]]]()
 let totalTeams = 3
 
-if isPlayerHeightsDoubleConvertible(in: experiencedLeaguePlayers) && isPlayerHeightsDoubleConvertible(in: inExperiencedLeaguePlayers) {
+// Adding empty teams to league before distributing players across them
+for _ in 1...totalTeams {
+    leagueTeams.append([[String:Any]]())
+}
+
+if isPlayerHeightDoubleConvertible(in: experiencedLeaguePlayers) && isPlayerHeightDoubleConvertible(in: inExperiencedLeaguePlayers) {
     // Sort experiencedLeaguePlayers in ascending order based on their heights and store the sorted array to a new collection
     let incHeightOrderExperiencedPlayers = experiencedLeaguePlayers.sorted{ ($0["height"] as! Double) < ($1["height"] as! Double) }
 
@@ -183,11 +202,6 @@ if isPlayerHeightsDoubleConvertible(in: experiencedLeaguePlayers) && isPlayerHei
     let totalExperiencedPlayers = incHeightOrderExperiencedPlayers.count
     let totalInExperiencedPlayers = decHeightOrderInExperiencedPlayers.count
     
-    // Adding empty teams to league before distributing players across them
-    for _ in 1...totalTeams {
-        leagueTeams.append([[String:Any]]())
-    }
-
     // Distribute the players in a balanced manner across the teams present in the leagueTeams Collection
     var j: Int
     for i in 0..<totalTeams {
@@ -282,14 +296,17 @@ print("") // To put a new line
 
 // Function to get average height of a team
 func getAvgHeightOfPlayers(in team:[[String: Any]]) -> Double {
+    if team.isEmpty { return 0.0 }
     var sumOfAllPlayersHeight = 0.0
     let totalPlayers = Double(team.count)
-    if isPlayerHeightsDoubleConvertible(in: team) {
+    if isPlayerHeightDoubleConvertible(in: team) {
         for player in team {
             sumOfAllPlayersHeight += player["height"] as! Double
         }
+    } else {
+        return 0.0
     }
-    return totalPlayers != 0 ? sumOfAllPlayersHeight / totalPlayers : 0
+    return sumOfAllPlayersHeight / totalPlayers
 }
 
 // Get and print the average height of players of each team
