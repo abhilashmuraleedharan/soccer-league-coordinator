@@ -108,51 +108,45 @@ let player18:[String: Any] = ["name":"Herschel Krustofski",
 let players = [player1, player2, player3, player4, player5, player6, player7, player8, player9, player10, player11, player12, player13, player14, player15, player16, player17, player18]
 
 // Function to print to console player details in a collection
-func displayPlayerDetails(inCollection list: [[String: Any]]) {
-    for player in list {
+func displayDetails(of players: [[String: Any]]) {
+    for player in players {
         print("") // To add a new line
-        for (detail, detailValue) in player {
-            print("\(detail): \(detailValue)")
+        for (attribute, attributeValue) in player {
+            print("\(attribute): \(attributeValue)")
         }
     }
 }
 
-// Test the displayPlayerDetails function by displaying information of all players in the league
+// Test the displayDetails function by displaying information of all players in the league
 print("Listing below the details of all players in the league")
 print("------------------------------------------------------")
-displayPlayerDetails(inCollection: players)
+displayDetails(of: players)
 print("")
 
 /*
  * Part 2
- * a) Create each team collections
- * b) Create a collection to hold teams
- * c) Put all experienced players in an array
- * d) Put all inexperienced players in another array
- * e) To have similar average height across teams,
+ * a) Put all experienced players in an array
+ * b) Put all inexperienced players in another array
+ * c) To have similar average height across teams,
  *       1) Sort experienced players array in ascending order of their heights
  *       2) Sort inexperienced players array in descending order of their heights
- * f) Distribute across the teams, players from the sorted experienced and
+ * d) Distribute across the teams, players from the sorted experienced and
  *    inexperienced players list in such a way that it satisfies the following conditions
  *    1. Ratio of experienced to inexperienced players across teams should be same
  *    2. Average Height difference between teams shouldn't exceed more than 1.5 inches
  */
 
-// Declare necessary collections
 var experiencedLeaguePlayers = [[String: Any]]()
 var inExperiencedLeaguePlayers = [[String: Any]]()
-var teamDragons = [[String: Any]]()
-var teamSharks = [[String: Any]]()
-var teamRaptors = [[String: Any]]()
-var leagueTeams = [teamDragons, teamSharks, teamRaptors]
-let totalTeams = 3
 
 // Put all experienced and inexperienced players in respective arrays
 for player in players {
-    if (player["experience"] as! Bool == true) {
-        experiencedLeaguePlayers.append(player)
-    } else {
-        inExperiencedLeaguePlayers.append(player)
+    if player["experience"] is Bool { // To prevent crash while force downcasting player["experience"] from 'Any' to 'Bool'
+        if (player["experience"] as! Bool == true) {
+            experiencedLeaguePlayers.append(player)
+        } else {
+            inExperiencedLeaguePlayers.append(player)
+        }
     }
 }
 
@@ -164,48 +158,72 @@ for player in players {
  *    average height of players in a team balances out across teams.
  */
 
-// Sort experiencedLeaguePlayers in ascending order based on their heights and store the sorted array to a new collection
-let incHeightSortedExperiencedPlayers = experiencedLeaguePlayers.sorted{ ($0["height"] as! Double) < ($1["height"] as! Double) }
-
-// Sort inExperiencedLeaguePlayers in decending order based on their height and store the sorted array to a new collection
-let decHeightSortedInExperiencedPlayers = inExperiencedLeaguePlayers.sorted{ ($0["height"] as! Double) > ($1["height"] as! Double) }
-
-// Distribute the players in a balanced manner across the teams present in the leagueTeams Collection
-let playersPerTeam = players.count/totalTeams
-var j: Int
-for i in 0..<totalTeams {
-    j = i
-    // Distributing experienced players equally across teams
-    for _ in 1...(incHeightSortedExperiencedPlayers.count / totalTeams) {
-       leagueTeams[i].append(incHeightSortedExperiencedPlayers[j])
-       j += totalTeams
+// To prevent a crash while force downcasting player["height"] from 'Any' to 'Double'
+func isPlayerHeightsDoubleConvertible(in collection: [[String: Any]]) -> Bool {
+    for player in collection {
+        if player["height"] is Double {
+            continue
+        } else {
+            return false
+        }
     }
-    j = i
-    // Distributing inexperienced players equally across teams
-    for _ in 1...(decHeightSortedInExperiencedPlayers.count / totalTeams) { 
-       leagueTeams[i].append(decHeightSortedInExperiencedPlayers[j])
-       j += totalTeams
+    return true
+}
+
+var leagueTeams = [[[String: Any]]]()
+let totalTeams = 3
+
+if isPlayerHeightsDoubleConvertible(in: experiencedLeaguePlayers) && isPlayerHeightsDoubleConvertible(in: inExperiencedLeaguePlayers) {
+    // Sort experiencedLeaguePlayers in ascending order based on their heights and store the sorted array to a new collection
+    let incHeightOrderExperiencedPlayers = experiencedLeaguePlayers.sorted{ ($0["height"] as! Double) < ($1["height"] as! Double) }
+
+    // Sort inExperiencedLeaguePlayers in decending order based on their height and store the sorted array to a new collection
+    let decHeightOrderInExperiencedPlayers = inExperiencedLeaguePlayers.sorted{ ($0["height"] as! Double) > ($1["height"] as! Double) }
+
+    let totalExperiencedPlayers = incHeightOrderExperiencedPlayers.count
+    let totalInExperiencedPlayers = decHeightOrderInExperiencedPlayers.count
+    
+    // Adding empty teams to league before distributing players across them
+    for _ in 1...totalTeams {
+        leagueTeams.append([[String:Any]]())
+    }
+
+    // Distribute the players in a balanced manner across the teams present in the leagueTeams Collection
+    var j: Int
+    for i in 0..<totalTeams {
+        j = i
+        // Distributing experienced players equally across teams
+        for _ in 1...(totalExperiencedPlayers / totalTeams) {
+            leagueTeams[i].append(incHeightOrderExperiencedPlayers[j])
+           j += totalTeams
+        }
+        j = i
+        // Distributing inexperienced players equally across teams
+        for _ in 1...(totalInExperiencedPlayers / totalTeams) {
+            leagueTeams[i].append(decHeightOrderInExperiencedPlayers[j])
+           j += totalTeams
+        }
     }
 }
 
 // Store each team’s players in its own collection for use in Part 3.
-teamDragons = leagueTeams[0]
-teamSharks = leagueTeams[1]
-teamRaptors = leagueTeams[2]
+let teamDragons = leagueTeams[0]
+let teamSharks = leagueTeams[1]
+let teamRaptors = leagueTeams[2]
 
 print("Team Dragons players are")
 print("------------------------------")
-displayPlayerDetails(inCollection: teamDragons)
+displayDetails(of: teamDragons)
 print("")
 
 print("Team Sharks players are")
 print("------------------------------")
-displayPlayerDetails(inCollection: teamSharks)
+displayDetails(of: teamSharks)
 print("")
 
 print("Team Raptors players are")
 print("------------------------------")
-displayPlayerDetails(inCollection: teamRaptors)
+displayDetails(of: teamRaptors)
 print("")
 
 /*
@@ -222,61 +240,60 @@ print("")
 let dragonsPracticeTime = "March 17, 1pm"
 let sharksPraciceTime = "March 17, 3pm"
 let raptorsPracticeTime = "March 18, 1pm"
-var teamSharksLetters = [String]()
-var teamDragonsLetters = [String]()
-var teamRaptorsLetters = [String]()
-var letters = [String]()
 
-// Function to format the letter to each player's guardians
-func formatLetterToGuardiansOfPlayers(aboutPracticeDateAndTime dateTime: String, ofTeam team: [[String: Any]], havingName teamName: String) -> [String] {
-    var guardians: String = ""
-    var playerName: String = ""
-    var letterBody: String = ""
-    var letters: [String] = []
+// Function that compose and return personalized letters for each player's guardians belonging to a team
+func composePersonalizedLettersToGuardians(ofTeam team: [[String: Any]], havingName teamName: String, aboutPracticeDateAndTime dateTime: String) -> [String] {
+    var playerGuardian = ""
+    var playerName = ""
+    var letterBody = ""
+    var letters = [String]()
+    
     for player in team {
-        guardians = player["guardian"] as! String
-        playerName = player["name"] as! String
-        letterBody = "To: \(guardians), Your child \(playerName) from Team \(teamName) will attend their first team practice on \(dateTime)"
-        letters.append(letterBody)
+        if player["guardian"] is String && player["name"] is String {
+            playerGuardian = player["guardian"] as! String
+            playerName = player["name"] as! String
+            letterBody = "To: \(playerGuardian), Your child \(playerName) from Team \(teamName) will attend their first team practice on \(dateTime)"
+            letters.append(letterBody)
+        }
     }
     return letters
 }
 
 // Function to send the letter to guardians of all players of all Teams
-func sendToGuardians(personalLetters letters: [String]) {
+func sendToGuardians(_ letters: [String]) {
     for letter in letters {
         print(letter)
     }
 }
 
 // Prepare and store letters to be sent out to each Team's player's guardians
-teamDragonsLetters = formatLetterToGuardiansOfPlayers(aboutPracticeDateAndTime: dragonsPracticeTime, ofTeam: teamDragons, havingName: "Dragons")
-teamSharksLetters = formatLetterToGuardiansOfPlayers(aboutPracticeDateAndTime: sharksPraciceTime, ofTeam: teamSharks, havingName: "Sharks")
-teamRaptorsLetters = formatLetterToGuardiansOfPlayers(aboutPracticeDateAndTime: raptorsPracticeTime, ofTeam: teamRaptors, havingName: "Raptors")
+let teamDragonsLetters = composePersonalizedLettersToGuardians(ofTeam: teamDragons, havingName: "Dragons", aboutPracticeDateAndTime: dragonsPracticeTime)
+let teamSharksLetters = composePersonalizedLettersToGuardians(ofTeam: teamSharks, havingName: "Sharks", aboutPracticeDateAndTime: sharksPraciceTime)
+let teamRaptorsLetters = composePersonalizedLettersToGuardians(ofTeam: teamRaptors, havingName: "Raptors", aboutPracticeDateAndTime: raptorsPracticeTime)
 
 // Compile all team letters in a single collection
-letters = teamDragonsLetters + teamSharksLetters + teamRaptorsLetters
+let letters = teamDragonsLetters + teamSharksLetters + teamRaptorsLetters
 
 // Send personalized letter to guardians of every players of all teams
-print("Send following letters to guardians of all players")
-sendToGuardians(personalLetters: letters)
+print("Sending personalized letters to guardians of all players")
+sendToGuardians(letters)
 
 print("") // To put a new line
 
 // Function to get average height of a team
-func getPlayersAvgHeight(ofTeam team:[[String: Any]]) -> Double {
-    var avgHeight: Double
-    var sumOfAllPlayersHeight: Double = 0.0
-    let totalPlayers: Double = Double(team.count)
-    for player in team {
-        sumOfAllPlayersHeight += player["height"] as! Double
+func getAvgHeightOfPlayers(in team:[[String: Any]]) -> Double {
+    var sumOfAllPlayersHeight = 0.0
+    let totalPlayers = Double(team.count)
+    if isPlayerHeightsDoubleConvertible(in: team) {
+        for player in team {
+            sumOfAllPlayersHeight += player["height"] as! Double
+        }
     }
-    avgHeight = sumOfAllPlayersHeight / totalPlayers
-    return avgHeight
+    return totalPlayers != 0 ? sumOfAllPlayersHeight / totalPlayers : 0
 }
 
 // Get and print the average height of players of each team
 print("----------------------------------------------------------------------------------------")
-print("Average height of players of Team Dragons is \(getPlayersAvgHeight(ofTeam: teamDragons)) inches")
-print("Average height of players of Team Sharks is \(getPlayersAvgHeight(ofTeam: teamSharks)) inches")
-print("Average height of players of Team Raptors is \(getPlayersAvgHeight(ofTeam: teamRaptors)) inches")
+print("Average height of players of Team Dragons is \(getAvgHeightOfPlayers(in: teamDragons)) inches")
+print("Average height of players of Team Sharks is \(getAvgHeightOfPlayers(in: teamSharks)) inches")
+print("Average height of players of Team Raptors is \(getAvgHeightOfPlayers(in: teamRaptors)) inches")
